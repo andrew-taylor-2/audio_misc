@@ -5,8 +5,8 @@
 #output: converted files in "converted" folder or in specified output folder (if provided)
 
 import sys
-#from os import listdir # ().: listdir;  ().path.: dirname,splitext,join,isfile,abspath
-#from os.path import dirname,splitext,join,isfile,abspath
+from os import listdir # ().: listdir;  ().path.: dirname,splitext,join,isfile,abspath
+from os.path import dirname,splitext,join,isfile,abspath
 import glob
 from shutil import copy2
 #import subprocess and use instead of os.system? Not sure -- I don't need any output or anything
@@ -24,7 +24,7 @@ def folder_convert(folder_list,out_path=None):
 
 	for folder in folder_list:
 		folder=os.path.abspath(folder)
-		files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))] #hmm I like the more object oriented approach where each of the folder contents has an isFolder attribute; might want a new library
+		files = [f for f in listdir(folder) if isfile(join(folder, f))] #hmm I like the more object oriented approach where each of the folder contents has an isFolder attribute; might want a new library
 
 		#categorize files method 1
 		#files_to_convert=[f for f in files if os.path.splitext(f)[1:] in extensions_to_convert] # a normal loop here might be more conservative of resources
@@ -64,8 +64,7 @@ def folder_convert(folder_list,out_path=None):
 			elif ext in extensions_to_keep:
 				#files_to_keep.append(f)
 				# copy the files to the output folder if given
-				# I should add a
-				copy2(os.path.join(folder,base_fn+'.'+ext),os.path.join(out_folder,base_fn+'.'+ext))
+				copy2(join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.'+ext))
 
 			#else: do nothing to other types of files
 
