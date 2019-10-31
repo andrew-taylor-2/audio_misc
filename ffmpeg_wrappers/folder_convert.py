@@ -21,17 +21,13 @@ def folder_convert(folder_list,out_path=None):
 	for folder in folder_list:
 		
 		folder=abspath(folder)
-		print(folder)
-		#out_folder=out_path if out_path else folder # this was previously within file loop, hopefully I'm not missing something
+
 		if out_path:
 			out_folder=out_path
 			mkdir(out_folder)
 		else: 
 			out_folder=folder
-			
-		print(out_folder)
-		#files = [f for f in listdir(folder) if isfile(join(folder, f))] #hmm I like the more object oriented approach where each of the folder contents has an isFolder attribute; might want a new library
-		
+
 		for file in listdir(folder):
 			if isfile(join(folder,file)) and '.' in file:
 				print(file)
@@ -43,21 +39,6 @@ def folder_convert(folder_list,out_path=None):
 				elif ext in extensions_to_keep:
 					# copy the files to the output folder
 					copy2(join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.'+ext))
-
-		# print(files)
-		# # loop files
-		# for base_fn,ext in files.rsplit('.',1) if '.' in files else (files,''):
-		# 	if ext in extensions_to_convert:
-
-		# 		command='ffmpeg -i %s %s' % join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.wav')
-		# 		system(command) #relevant files converted to wav
-
-		# 	elif ext in extensions_to_keep:
-		# 		# copy the files to the output folder
-		# 		copy2(join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.'+ext))
-
-			#else: do nothing to other types of files
-
 
 if __name__ == "__main__":
 	import argparse
