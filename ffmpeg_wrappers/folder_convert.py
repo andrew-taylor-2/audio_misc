@@ -5,14 +5,12 @@
 #output: converted files in "converted" folder or in specified output folder (if provided)
 
 import sys
-from os import listdir,system,mkdir # ().: listdir;  ().path.: dirname,splitext,join,isfile,abspath
+from os import listdir,system,mkdir 
 from os.path import dirname,splitext,join,isfile,abspath
 import glob
 from shutil import copy2
-#import subprocess and use instead of os.system? Not sure -- I don't need any output or anything
 
 def folder_convert(folder_list,out_path=None):
-	#I think I should actually change this to only work on one folder -- then my "out_path" troubles would be easier
 
 	# cases
 	extensions_to_convert=('flac','raw','ogg','mpc','webm')
