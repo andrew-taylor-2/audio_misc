@@ -14,12 +14,18 @@ import argparse
 class ActionRequest:
 
 	def __init__(self):
+		#parsers
 		parser=argparse.ArgumentParser()
-		parser.add_argument('folders',nargs='+',help='One or more folders containing audio files to convert')
-		parser.add_argument('-o',dest='out_path',metavar='out_path',default=None,help='Optional out path for "converted" folder')
+		subparsers=parser.add_subparsers()
+		cd_conv_parser=subparsers.add_parser('toCD')
+		cd_conv_parser.add_argument('folders',nargs='+',help='One or more folders containing audio files to convert')
+		cd_conv_parser.add_argument('-o',dest='out_path',metavar='out_path',default=None,help='Optional out path for "converted" folder')
+		cd_conv_parser.set_defaults(func=self.folder_convert)
+
 		args=parser.parse_args()
-		print(args.out_path)
-		self.folder_convert(args.folders,args.out_path)
+		args.func(args)
+		# print(args.out_path)
+		# self.folder_convert(args.folders,args.out_path)
 
 	def folder_convert(folder_list,out_path=None):
 
@@ -49,4 +55,5 @@ class ActionRequest:
 						# copy the files to the output folder
 						copy2(join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.'+ext))
 
-
+if __name__ == "__main__":
+	ActionRequest()
