@@ -13,6 +13,9 @@ import argparse
 
 class ActionRequest:
 
+	#for debugging
+			#def __init__(self,input):
+
 	def __init__(self):
 		#parsers
 		parser=argparse.ArgumentParser()
@@ -23,17 +26,21 @@ class ActionRequest:
 		cd_conv_parser.set_defaults(func=self.folder_convert)
 
 		args=parser.parse_args()
+		#for debugging:
+			#args=parser.parse_args(input.split())
+			# self.args=args
 		args.func(args)
-		# print(args.out_path)
-		# self.folder_convert(args.folders,args.out_path)
+		
 
-	def folder_convert(folder_list,out_path=None):
-
+	def folder_convert(self,args):
+		
+		folders=args.folders
+		out_path=args.out_path if hasattr(args,'out_path') else None
 		# cases
 		extensions_to_convert=('flac','raw','ogg','mpc','webm')
 		extensions_to_keep=('mp3','wav','m4a','aiff') # keeping formats commonly supported by cd burners
 
-		for folder in folder_list:
+		for folder in folders:
 			
 			folder=abspath(folder)
 
