@@ -6,7 +6,7 @@
 
 import sys
 from os import listdir,system,mkdir 
-from os.path import dirname,splitext,join,isfile,abspath
+from os.path import dirname,splitext,join,isfile,abspath,exists
 import glob
 from shutil import copy2
 
@@ -22,7 +22,8 @@ def folder_convert(folder_list,out_path=None):
 
 		if out_path:
 			out_folder=out_path
-			mkdir(out_folder)
+			if !exists(out_folder): #no need to worry about race condition since there is probably not another process making this
+				mkdir(out_folder)
 		else: 
 			out_folder=folder
 
