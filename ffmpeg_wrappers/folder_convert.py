@@ -24,7 +24,7 @@ def folder_convert(args):
 		#folder=abspath(folder) # don't think this is actually necessary 
 		if out_path:
 			out_folder=out_path
-			if !exists(out_folder): #no need to worry about race condition since there is probably not another process making this
+			if not exists(out_folder): #no need to worry about race condition since there is probably not another process making this
 				mkdir(out_folder)
 		else: 
 			out_folder=folder
