@@ -14,7 +14,7 @@ folders  One or more folders containing audio files to convert
 
 optional arguments:
 -h, --help show this help message and exit
--o out_path  Optional out path for "converted" folder
+-o out_path  Out path for "converted" folder
 ```
 
 - Function 2
