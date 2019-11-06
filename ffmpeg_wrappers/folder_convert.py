@@ -85,7 +85,7 @@ if __name__ == "__main__":
 	#subparser "compress" for match_audio_to_power_histogram
 	compress_parser=subparsers.add_parser('compress')
 	compress_parser.add_argument('movie',help='A movie file for which to compress audio')
-	compress_parser.add_argument('movie_out',help='Optional out path for "converted" folder')
+	compress_parser.add_argument('movie_out',help='Out path for "converted" folder')
 	compress_parser.add_argument('-type',dest='mtype',type=str,default=None,help='User specified type -- if given, skips matching algo. As code is unfinished, only <None> works for general whisper/scream compression')
 
 	#compress_parser.set_defaults(func=match_audio_to_power_histogram)
