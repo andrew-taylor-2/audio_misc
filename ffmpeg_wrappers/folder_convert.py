@@ -5,11 +5,7 @@
 #output: converted files in "converted" folder or in specified output folder (if provided)
 
 import sys
-<<<<<<< HEAD
-from os import listdir,system,mkdir 
-=======
 from os import listdir,system,mkdir
->>>>>>> action_request
 from os.path import dirname,splitext,join,isfile,abspath,exists
 import glob
 from shutil import copy2
@@ -30,11 +26,7 @@ def folder_convert(args):
 			out_folder=out_path
 			if not exists(out_folder): #no need to worry about race condition since there is probably not another process making this
 				mkdir(out_folder)
-<<<<<<< HEAD
-		else: 
-=======
 		else:
->>>>>>> action_request
 			out_folder=folder
 
 		for file in listdir(folder):
@@ -63,13 +55,13 @@ def apply_audio_compression(args):
 	movie=args.movie
 	movie_out=args.movie_out
 
-	#horror_transfer
-	#comedy_transfer
-	#drama_transfer
+	#horror_transfer=
+	#comedy_transfer=
+	#drama_transfer=
 	default_transfer='compand=0 0:1 1:-90/-900 -70/-70 -30/-9 0/-3:6:0:0:0'
 
-	mt2c_in={None:default_transfer}
 	#mt2c_in={None:default_transfer,'horror':horror_transfer,'comedy':comedy_transfer,'drama':drama_transfer}
+	mt2c_in={None:default_transfer}
 	compand_inputs=mt2c_in[mtype]
 
 	command='ffmpeg -i "%s" -af "aformat=channel_layouts=stereo, compand=0 0:1 1:-90/-900 -70/-70 -30/-9 0/-3:6:0:0:0" "%s"' % (movie,movie_out) # this works for video or audio file, right?
@@ -79,6 +71,7 @@ def apply_audio_compression(args):
 
 
 if __name__ == "__main__":
+
 	#parsers
 	parser=argparse.ArgumentParser()
 	subparsers=parser.add_subparsers()
