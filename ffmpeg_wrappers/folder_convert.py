@@ -5,7 +5,7 @@
 #output: converted files in "converted" folder or in specified output folder (if provided)
 
 import sys
-from os import listdir,system,mkdir 
+from os import listdir,system,mkdir
 from os.path import dirname,splitext,join,isfile,abspath,exists
 import glob
 from shutil import copy2
@@ -13,7 +13,7 @@ import argparse
 import errno
 
 def folder_convert(args):
-	
+
 	folders=args.folders
 	out_path=args.out_path if hasattr(args,'out_path') else None
 	# cases
@@ -21,12 +21,12 @@ def folder_convert(args):
 	extensions_to_keep=('mp3','wav','m4a','aiff') # keeping formats commonly supported by cd burners
 
 	for folder in folders:
-		#folder=abspath(folder) # don't think this is actually necessary 
+		#folder=abspath(folder) # don't think this is actually necessary
 		if out_path:
 			out_folder=out_path
 			if not exists(out_folder): #no need to worry about race condition since there is probably not another process making this
 				mkdir(out_folder)
-		else: 
+		else:
 			out_folder=folder
 
 		for file in listdir(folder):
@@ -41,16 +41,29 @@ def folder_convert(args):
 					# copy the files to the output folder
 					copy2(join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.'+ext))
 
-# def compress_movie_audio():
+def match_audio_to_power_histogram(args):
+	pass
+
+def apply_audio_compression(args):
+	#basically just call ffmpeg and "compand" based on which movie audio power contour type was selected
+	# if none has been selected, do the default/"secret recipe"
+	pass
+
 
 if __name__ == "__main__":
 	#parsers
 	parser=argparse.ArgumentParser()
 	subparsers=parser.add_subparsers()
+
+	#subparser "toCD" for folder_convert
 	cd_conv_parser=subparsers.add_parser('toCD')
 	cd_conv_parser.add_argument('folders',nargs='+',help='One or more folders containing audio files to convert')
 	cd_conv_parser.add_argument('-o',dest='out_path',metavar='out_path',default=None,help='Optional out path for "converted" folder')
 	cd_conv_parser.set_defaults(func=folder_convert)
+
+	compress_parser=subparsers.add_parser('toCD')
+	compress_parser.add_argument('movie',help='A movie file for which to compress audio')
+	compress_parser.set_defaults(func=match_audio_to_power_histogram)
 
 	#movie_comp_parser=subparsers.add_parser('compressMovie')
 
