@@ -5,7 +5,7 @@ Coming soon: Algorithm for matching movie to genre based on histogram of sound a
 # Current usage:
 `folder_convert.py [-h] {toCD,compress} ...`
 
-- Function 1
+### Function 1
 ```
 folder_convert.py toCD [-h] [-o out_path] folders [folders ...]
 
@@ -17,7 +17,7 @@ optional arguments:
 -o out_path  Out path for "converted" folder
 ```
 
-- Function 2
+### Function 2
 ```
 folder_convert.py compress [-h] [-type MTYPE] movie movie_out
 
