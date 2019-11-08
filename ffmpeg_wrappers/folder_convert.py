@@ -42,6 +42,8 @@ def folder_convert(args):
 					copy2(join(folder,base_fn+'.'+ext),join(out_folder,base_fn+'.'+ext))
 
 def match_audio_to_power_histogram(args):
+	#first I gotta get the audio from the videos
+	# for some reason it was hard to find good tools for this so regrettably I think I'm gonna have to get ffmpeg to write an audio file then sample that 
 	pass
 
 #def apply_audio_compression(mtype,movie,movie_out):
