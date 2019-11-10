@@ -66,7 +66,7 @@ def apply_audio_compression(args):
 	mt2c_in={None:default_transfer}
 	compand_inputs=mt2c_in[mtype]
 
-	command='ffmpeg -i "%s" -af "aformat=channel_layouts=stereo, compand=0 0:1 1:-90/-900 -70/-70 -30/-9 0/-3:6:0:0:0" "%s"' % (movie,movie_out) # this works for video or audio file, right?
+	command='ffmpeg -i "%s" -af "aformat=channel_layouts=stereo%s" "%s"' % (movie,', '+compand_inputs,movie_out) # this works for video or audio file, right?
 	system(command)
 
 
