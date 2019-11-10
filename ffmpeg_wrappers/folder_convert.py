@@ -7,10 +7,12 @@
 import sys
 from os import listdir,system,mkdir
 from os.path import dirname,splitext,join,isfile,abspath,exists
+import subprocess as sp
 import glob
 from shutil import copy2
 import argparse
 import errno
+import numpy as np
 
 def folder_convert(args):
 
@@ -43,8 +45,29 @@ def folder_convert(args):
 
 def match_audio_to_power_histogram(args):
 	#first I gotta get the audio from the videos
-	# for some reason it was hard to find good tools for this so regrettably I think I'm gonna have to get ffmpeg to write an audio file then sample that 
-	pass
+	# for some reason it was hard to find good tools for this so regrettably I think I'm gonna have to get ffmpeg to write an audio file then sample that
+
+
+	#I can write input sanitizing later
+	command='ffmpeg -i "%s" \
+	# -ab 45k # audio bitrate: very low (like a bad quality phone call) # Im not using this anymore
+	-f u8 \ # we want just the raw data
+	-ac 1 \ # just one audio channel
+	-ar 10k \ # well be disregarding very high frequencies -- hope this doesnt come back to bite us
+	-vn \ # we dont need video stream
+	 pipe:' \ #send output to stdout
+	 % args.movie # input
+
+	 p=sp.Popen(command,stdout=sp.PIPE,stderr=sp.PIPE,shell=True) #keep env variables i.e. use PATH to find ffmpeg (or hash table)
+	 pout,perr=p.communicate() # get standard out and error from subprocess
+	 # I need to test to make sure pout isn't too large
+
+	 #get as numpy array
+	 datagen=sf.blocks(io.BytesIO(pout),channels=1,samplerate=10000,subtype='PCM_U8',blocksize=10000) # need to provide this metadata bc the raw format doesn't. Getting audio blocks of one second
+	 rms=[np.sqrt(np.mean(block**2)) for block in datagen] #get rms power
+
+	 # optionally scale power then get normalized correlation or something like that with audio genre priors
+
 
 #def apply_audio_compression(mtype,movie,movie_out):
 #temporarily using the line below for debugging
