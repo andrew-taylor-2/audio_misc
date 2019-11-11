@@ -51,9 +51,10 @@ def match_audio_to_power_histogram(args):
 	#I can write input sanitizing later
 	command='ffmpeg -i "%s" \
 	# -ab 45k # audio bitrate: very low (like a bad quality phone call) # Im not using this anymore
-	-f u8 \ # we want just the raw data
+	-f flac \ # we want just the raw data
+	-sample_fmt s16
 	-ac 1 \ # just one audio channel
-	-ar 10k \ # well be disregarding very high frequencies -- hope this doesnt come back to bite us
+	-ar 5k \ # well be disregarding very high frequencies -- hope this doesnt come back to bite us
 	-vn \ # we dont need video stream
 	 pipe:' \ #send output to stdout
 	 % args.movie # input
@@ -63,9 +64,14 @@ def match_audio_to_power_histogram(args):
 	 # I need to test to make sure pout isn't too large
 
 	 #get as numpy array
-	 datagen=sf.blocks(io.BytesIO(pout),channels=1,samplerate=10000,subtype='PCM_U8',blocksize=10000) # need to provide this metadata bc the raw format doesn't. Getting audio blocks of one second
-	 rms=[np.sqrt(np.mean(block**2)) for block in datagen] #get rms power
-
+	 datagen=sf.blocks(io.BytesIO(pout),blocksize=5000) # need to provide this metadata bc the raw format doesn't. Getting audio blocks of one second
+	rms=[] 
+	for block in datagen: #get rms power
+		try:
+			rms.append(np.sqrt(np.mean(block**2)))
+		except RuntimeError: # This probably isnt that safe, but I get a seek error on the last block...
+			pass
+	 #hooray, I have the rms.
 	 # optionally scale power then get normalized correlation or something like that with audio genre priors
 
 
