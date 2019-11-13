@@ -48,35 +48,52 @@ def match_audio_to_power_histogram(args):
     # for some reason it was hard to find good tools for this so regrettably I think I'm gonna have to get ffmpeg to write an audio file then sample that
     #I can write input sanitizing later
 
-    command='ffmpeg -i "%s" '\
-    '-f flac '\
-    # we want just the raw data
+    get_m_rms(args.movie)
+
+     # optionally scale power then get normalized correlation or something like that with audio genre priors
+
+def get_rms(m_fn):
+    #first I gotta get the audio from the videos
+    # for some reason it was hard to find good tools for this so regrettably I think I'm gonna have to get ffmpeg to write an audio file then sample that
+
+    #I can write input sanitizing later
+
+    command=(
+
+    f'ffmpeg -i "{m_fn}" '
+    #input user's movie
+
+    '-f aiff '
+    # we're putting it in aiff so sndfl gets the metadata; was going to use flac but it might have trouble with streams?
+
     '-sample_fmt s16 '
     # signed 16 bit datapoints
-    '-ac 1 '\
-    # just one audio channel
-    '-ar 5k '\
-    # well be disregarding very high frequencies -- hope this doesnt come back to bite us
-    '-vn '\
-    # we dont need video stream
-    'pipe:' \
-    # send output to stdout
-    % args.movie # input
 
-    p=sp.Popen(command,stdout=sp.PIPE,stderr=sp.PIPE,shell=True) #keep env variables i.e. use PATH to find ffmpeg (or hash table)
+    '-ac 1 '
+    # just one audio channel
+
+    '-ar 5k '
+    # well be disregarding very high frequencies -- hope this doesnt come back to bite us
+
+    '-vn '
+    # we dont need video stream
+
+    'pipe:')
+    # send output to stdout
+
+    p=sp.Popen(shlex.split(command),stdout=sp.PIPE,stderr=sp.PIPE) #keep env variables i.e. use PATH to find ffmpeg (or hash table)
     pout,perr=p.communicate() # get standard out and error from subprocess
     # I need to test to make sure pout isn't too large
 
     #get as numpy array
     datagen=sf.blocks(io.BytesIO(pout),blocksize=5000) # need to provide this metadata bc the raw format doesn't. Getting audio blocks of one second
-    rms=[] 
+    rms=[]
     for block in datagen: #get rms power
         try:
             rms.append(np.sqrt(np.mean(block**2)))
         except RuntimeError: # This probably isnt that safe, but I get a seek error on the last block...
             pass
-     #hooray, I have the rms.
-     # optionally scale power then get normalized correlation or something like that with audio genre priors
+    return rms
 
 
 #def apply_audio_compression(mtype,movie,movie_out):
